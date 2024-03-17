@@ -123,8 +123,17 @@ function makeImmutable(obj) {
  *    makeWord({ a: [0, 1], b: [2, 3], c: [4, 5] }) => 'aabbcc'
  *    makeWord({ H:[0], e: [1], l: [2, 3, 8], o: [4, 6], W:[5], r:[7], d:[9]}) => 'HelloWorld'
  */
-function makeWord(/* lettersObject */) {
-  throw new Error('Not implemented');
+function makeWord(lettersObject) {
+  const result = [];
+  const values = Object.entries(lettersObject);
+  for (let i = 0; i < values.length; i += 1) {
+    const letter = values[i][0];
+    const positions = values[i][1];
+    for (let j = 0; j < positions.length; j += 1) {
+      result[positions[j]] = letter;
+    }
+  }
+  return result.join('');
 }
 
 /**
@@ -141,8 +150,25 @@ function makeWord(/* lettersObject */) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  const ticketPrice = 25;
+  let cash = 0;
+
+  for (let i = 0; i < queue.length; i += 1) {
+    if (queue[i] === ticketPrice) {
+      cash += ticketPrice;
+    } else {
+      const change = queue[i] - ticketPrice;
+
+      if (cash >= change) {
+        cash -= change;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -189,8 +215,8 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  return Object.assign(Object.create(proto), JSON.parse(json));
 }
 
 /**
@@ -219,8 +245,13 @@ function fromJSON(/* proto, json */) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  arr.sort((a, b) => {
+    if (a.country + a.city < b.country + b.city) return -1;
+    if (a.country + a.city > b.country + b.city) return 1;
+    return 0;
+  });
+  return arr;
 }
 
 /**
@@ -253,8 +284,20 @@ function sortCitiesArray(/* arr */) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+
+  array.forEach((item) => {
+    const country = keySelector(item);
+    const city = valueSelector(item);
+    if (!map.has(country)) {
+      map.set(country, [city]);
+    } else {
+      map.get(country).push(city);
+    }
+  });
+
+  return map;
 }
 
 /**
